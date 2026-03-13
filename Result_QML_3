@@ -1,0 +1,133 @@
+C:\Users\anish\AppData\Local\Programs\Python\Python310\python.exe D:\Projects\QML_6G\QML_3.py
+════════════════════════════════════════════════════════════════════
+  QML-BASED TRAFFIC MANAGEMENT IN 6G NETWORKS
+  Hybrid Variational Quantum Circuit (VQC) Classifier
+════════════════════════════════════════════════════════════════════
+  Qubits       : 4
+  VQC Layers   : 3
+  Classes      : 3  (eMBB | URLLC | mMTC)
+  Features     : 8
+  Epochs       : 10
+  Batch size   : 32
+  Learning rate: 0.008
+  Samples      : 900
+════════════════════════════════════════════════════════════════════
+
+[1/7] Loading 5G Traffic Dataset (Kim & Choi 2022)...
+      Path    : D:\Projects\QML_6G\5G_Traffic_Datasets
+      Source  : https://www.kaggle.com/datasets/kimdaegyeom/5g-traffic-datasets
+      Scanning: D:\Projects\QML_6G\5G_Traffic_Datasets
+      [INFO] Files not found (will be skipped): ['NaverNOW', 'AfreecaTV', 'YouTube', 'Zoom', 'MSteams', 'GoogleMeet', 'Cloudgaming', 'Mobilegame', 'Zepeto', 'Roblox']
+
+      [FALLBACK] Real files could not be loaded — using synthetic data.
+      Check DATASET_PATH and CSV column names.
+      Mode    : Synthetic fallback
+      Shape   : (900, 9)
+      Classes : {0: 300, 1: 300, 2: 300}
+      Mapping : 0=eMBB  (NaverNOW / AfreecaTV / YouTube / Zoom / Teams / Meet)
+                1=URLLC (Cloudgaming / Mobilegame)
+                2=mMTC  (Zepeto / Roblox)
+
+  Feature statistics:
+       throughput_kbps  avg_pkt_size_bytes  inter_arrival_mean_us  inter_arrival_std_us  flow_pkt_count  dl_ul_ratio  bitrate_mean_kbps  bitrate_std_kbps
+count           900.00              900.00                 900.00                900.00          900.00       900.00             900.00            900.00
+mean           6479.78              545.35                7664.88               5267.94          295.31         6.35            5560.73           1225.47
+std            6032.39              415.39               11475.38               7470.38          287.68         6.60            5293.42           1210.25
+min              10.00               40.00                  11.26                  1.00            1.00         0.20               1.00              0.10
+25%             239.80              193.66                  95.61                 53.23           15.56         1.67             157.89             37.85
+50%            5433.02              384.91                 345.44                802.53          220.94         2.49            4645.68            883.29
+75%           11065.39              962.59               17378.09              11695.22          548.37        12.22            9459.49           2207.23
+max           25656.98             1500.00               48350.83              30899.32         1105.74        26.43           23125.99           4618.37
+
+[2/7] Preprocessing...
+      Train samples : 675
+      Test  samples : 225
+      Features      : 8  (throughput, pkt_size, IAT, jitter, pkt_count, DL/UL, bitrate_mean, bitrate_std)
+                       →  angle-encoded into 4 qubits
+
+[3/7] Training Hybrid QNN (VQC)...
+──────────────────────────────────────────────────────────────────────────────────────────
+  Epoch  Train Loss  Train Acc  Val Loss  Val Acc          LR   Time/Ep         ETA
+──────────────────────────────────────────────────────────────────────────────────────────
+      1      0.9494     57.74%    0.6735   67.56%    0.007807  380.7s/ep  ETA 57m05s ◄ best
+      2      0.4542     81.55%    0.2295   96.00%    0.007246  379.2s/ep  ETA 50m39s ◄ best
+      3      0.1485     96.58%    0.0683   96.89%    0.006372  376.1s/ep  ETA 44m10s ◄ best
+      4      0.0363     99.11%    0.0050  100.00%    0.005271  375.9s/ep  ETA 37m47s ◄ best
+      5      0.0178     99.11%    0.0011  100.00%    0.004050  377.5s/ep  ETA 31m29s ◄ best
+      6      0.0106    100.00%    0.0005  100.00%    0.002829  379.1s/ep  ETA 25m12s ◄ best
+      7      0.0055     99.85%    0.0004  100.00%    0.001728  414.3s/ep  ETA 19m09s ◄ best
+      8      0.0097     99.70%    0.0003  100.00%    0.000854  421.0s/ep  ETA 12m55s ◄ best
+      9      0.0098     99.55%    0.0003  100.00%    0.000293  415.7s/ep  ETA 06m31s ◄ best
+     10      0.0057    100.00%    0.0002  100.00%    0.000100  442.6s/ep  ETA 00m00s ◄ best
+──────────────────────────────────────────────────────────────────────────────────────────
+  Training complete in 3962.0s  (avg 396.2s/epoch)
+  Best Val Accuracy : 100.00%  (Epoch 4)
+
+[4/7] Training classical baselines...
+
+  Model                   Accuracy  Precision   Recall       F1
+  ────────────────────────────────────────────────────────────
+  Hybrid QNN (VQC)         100.00%    100.00%   100.00%   100.00%
+  Random Forest            100.00%    100.00%   100.00%   100.00%
+  SVM (RBF)                100.00%    100.00%   100.00%   100.00%
+  Gradient Boost           100.00%    100.00%   100.00%   100.00%
+
+[5/7] Classification Report — Hybrid QNN (VQC):
+              precision    recall  f1-score   support
+
+        eMBB     1.0000    1.0000    1.0000        75
+       URLLC     1.0000    1.0000    1.0000        75
+        mMTC     1.0000    1.0000    1.0000        75
+
+    accuracy                         1.0000       225
+   macro avg     1.0000    1.0000    1.0000       225
+weighted avg     1.0000    1.0000    1.0000       225
+
+[6/7] Generating report-quality figures...
+      Saved → qml_6g_outputs\01_training_curves.png
+      Saved → qml_6g_outputs\02_confusion_matrix.png
+      Saved → qml_6g_outputs\03_precision_recall_f1.png
+      Saved → qml_6g_outputs\04_roc_curves.png
+      Saved → qml_6g_outputs\05_model_comparison.png
+      Saved → qml_6g_outputs\06_feature_analysis.png
+      Saved → qml_6g_outputs\07_quantum_circuit.png
+      Saved → qml_6g_outputs\08_per_class_metrics.png
+      Saved → qml_6g_outputs\09_training_dynamics.png
+      Saved → qml_6g_outputs\10_full_dashboard.png
+
+[7/7] All figures saved to: ./qml_6g_outputs/
+
+════════════════════════════════════════════════════════════════════
+  FINAL RESULTS SUMMARY
+════════════════════════════════════════════════════════════════════
+  Dataset       : 900 samples from real 5G CSV files
+  Features      : 8  (throughput, pkt_size, IAT_mean, IAT_std,
+                    pkt_count, DL/UL_ratio, bitrate_mean, bitrate_std)
+  Architecture  : Hybrid QNN  (Classical → VQC → Classical)
+  Quantum Part  : 4-qubit VQC | 3 StronglyEntangling layers
+  Optimizer     : Adam + Cosine Annealing LR
+  Epochs trained: 10  (all printed above)
+
+  Model                   Accuracy  Precision   Recall       F1
+  ────────────────────────────────────────────────────────────
+  Hybrid QNN (VQC)         100.00%    100.00%   100.00%   100.00%  ◄ QML
+  Random Forest            100.00%    100.00%   100.00%   100.00%
+  SVM (RBF)                100.00%    100.00%   100.00%   100.00%
+  Gradient Boost           100.00%    100.00%   100.00%   100.00%
+
+  OUTPUT FILES:
+    01_training_curves.png       — Loss & Accuracy ALL epochs
+    02_confusion_matrix.png      — Raw + Normalised confusion matrices
+    03_precision_recall_f1.png   — Per-class P/R/F1 bar charts
+    04_roc_curves.png            — ROC + AUC all classes & models
+    05_model_comparison.png      — Grouped bar + Radar chart
+    06_feature_analysis.png      — Scatter + Correlation + Importance
+    07_quantum_circuit.png       — Full VQC gate diagram
+    08_per_class_metrics.png     — P/R heatmaps all models
+    09_training_dynamics.png     — LR schedule + P/R/F1 curves
+    10_full_dashboard.png        — Combined report dashboard
+════════════════════════════════════════════════════════════════════
+  ✅  COMPLETE — ready to use in your research report!
+════════════════════════════════════════════════════════════════════
+
+Process finished with exit code 0
