@@ -9,8 +9,8 @@
 | **Semester** | Final Semester (8th Semester) |
 | **Academic Year** | 2025 – 2026 |
 | **Domain** | Quantum Machine Learning · 6G Networks · Deep Learning |
-| **Guide** | *(Add supervisor name)* |
-| **Institution** | *(Add institution name)* |
+| **Guide** | Dr. Anjan Bandyopadhyay |
+| **Institution** | Kalinga Institute of Industrial Technology |
 
 ---
 
