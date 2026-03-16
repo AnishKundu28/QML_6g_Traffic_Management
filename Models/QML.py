@@ -16,7 +16,7 @@ os.makedirs("results", exist_ok=True)
 # ---------------------------
 # Load dataset
 # ---------------------------
-data = pd.read_csv("6g_dataset.csv")
+data = pd.read_csv("../6g_dataset.csv")
 
 # Encode categorical columns
 for col in data.columns:

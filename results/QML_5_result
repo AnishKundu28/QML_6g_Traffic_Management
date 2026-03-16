@@ -1,0 +1,190 @@
+Microsoft Windows [Version 10.0.26200.8037]
+(c) Microsoft Corporation. All rights reserved.
+
+D:\Projects\QML_6G>python QML_5.py
+════════════════════════════════════════════════════════════════════
+  QML-BASED TRAFFIC MANAGEMENT IN 6G NETWORKS
+  Hybrid Variational Quantum Circuit (VQC) Classifier
+════════════════════════════════════════════════════════════════════
+  Qubits       : 4  (2^4 = 16-dim state space)
+  VQC Layers   : 5
+  Classes      : 3  (eMBB | URLLC | mMTC)
+  Features     : 8
+  Epochs       : 40
+  Batch size   : 32
+  Learning rate: 0.004  (cosine annealing → 1e-4)
+  Samples      : 1200  (400 per class)
+  Class weights: eMBB=1.0  URLLC=2.5  mMTC=1.0
+════════════════════════════════════════════════════════════════════
+
+[1/7] Loading 5G Traffic Dataset (Kim & Choi 2022)...
+      Path   : D:\Projects\QML_6G\5G_Traffic_Datasets
+      Source : https://www.kaggle.com/datasets/kimdaegyeom/5g-traffic-datasets
+      Format : Wireshark CSV  (No.|Time|Source|Destination|Protocol|Length|Info)
+
+      [URLLC]  Game_Streaming/GeForce_Now/  (9 files) ... 1350 windows
+      [URLLC]  Game_Streaming/KT_GameBox/  (10 files) ... 1500 windows
+      [eMBB ]  Live_Streaming/AfreecaTV/  (2 files) ... 150 windows
+      [eMBB ]  Live_Streaming/Naver_NOW/  (4 files) ... 450 windows
+      [eMBB ]  Live_Streaming/YouTube_Live/  (5 files) ... 600 windows
+      [mMTC ]  Metaverse/Roblox/  (1 files) ... 150 windows
+      [mMTC ]  Metaverse/Zepeto/  (10 files) ... 1437 windows
+      [URLLC]  Online_Game/Battleground/  (9 files) ... 1350 windows
+      [URLLC]  Online_Game/Teamfight_Tactics/  (9 files) ... 1350 windows
+      [eMBB ]  Stored_Streaming/Amazon_Prime/  (8 files) ... 0 windows — skipped
+      [eMBB ]  Stored_Streaming/Netflix/  (1 files) ... 150 windows
+      [eMBB ]  Stored_Streaming/YouTube/  (1 files) ... 150 windows
+      [eMBB ]  Video_Conferencing/Google_Meet/  (1 files) ... 0 windows — skipped
+      [eMBB ]  Video_Conferencing/MS_Teams/  (2 files) ... 300 windows
+      [eMBB ]  Video_Conferencing/Zoom/  (3 files) ... 450 windows
+
+      Windows loaded:
+        eMBB  (0):  2250 windows  (15 CSV files)
+        URLLC (1):  5550 windows  (37 CSV files)
+        mMTC  (2):  1587 windows  (11 CSV files)
+
+      Mode    : Real Wireshark CSV data
+      Shape   : (1200, 9)
+      Classes : {0: 400, 1: 400, 2: 400}
+      Mapping : 0=eMBB  (Stored/Live Streaming + Video Conferencing)
+                1=URLLC (Game Streaming + Online Game)
+                2=mMTC  (Metaverse)
+
+  Feature statistics:
+       throughput_kbps  avg_pkt_size_bytes  inter_arrival_mean_us  inter_arrival_std_us  flow_pkt_count  dl_ul_ratio  bitrate_mean_kbps  bitrate_std_kbps
+count          1200.00             1200.00                1200.00               1200.00         1200.00      1200.00            1200.00           1200.00
+mean           2965.16              536.56               22543.03              33270.27          326.94        54.44            2630.10           1260.41
+std            9050.54              478.53               47204.72              55177.60          510.93       106.70            4708.60           4559.81
+min               1.00               40.00                  74.24                  0.00            2.00         0.01               1.61              0.00
+25%               8.89               70.61                1157.19               2813.46           10.00         1.10              15.38              5.15
+50%             131.18              451.72                5446.57              10430.21           73.50         2.75             977.04             82.41
+75%            2418.14             1046.39               26961.89              37153.41          461.25        69.99            3047.25            690.37
+max          205040.95             1500.00              951415.00             390994.88         4826.00      1000.00           93009.40          96711.37
+
+[2/7] Preprocessing...
+      Train samples : 900
+      Test  samples : 300
+      Features      : 8  angle-encoded into 4 qubits
+      Batches/epoch : 28  (batch_size=32, drop_last=True)
+
+[3/7] Training Hybrid QNN (VQC)...
+───────────────────────────────────────────────────────────────────────────────────────────────
+  Epoch  Train Loss  Train Acc  Val Loss  Val Acc          LR   Time/Ep         ETA
+───────────────────────────────────────────────────────────────────────────────────────────────
+      1      0.9634     35.38%    0.8591   40.67%    0.003994  1015.0s/ep  ETA 10h59m43s ◄ best
+      2      0.7378     53.79%    0.6292   58.33%    0.003976  1010.5s/ep  ETA 10h41m24s ◄ best
+      3      0.6541     61.94%    0.5920   56.67%    0.003946  1020.1s/ep  ETA 10h26m01s
+      4      0.6079     60.27%    0.5235   59.67%    0.003905  1010.2s/ep  ETA 10h08m21s ◄ best
+      5      0.5885     60.38%    0.5069   67.67%    0.003852  1012.0s/ep  ETA 9h51m13s ◄ best
+      6      0.5744     67.86%    0.4941   81.00%    0.003787  1009.2s/ep  ETA 9h33m55s ◄ best
+      7      0.5713     67.19%    0.4977   67.33%    0.003713  1009.1s/ep  ETA 9h16m45s
+      8      0.5642     67.52%    0.4914   69.67%    0.003628  1008.9s/ep  ETA 8h59m39s
+      9      0.5183     72.66%    0.4949   70.00%    0.003533  1010.7s/ep  ETA 8h42m43s
+     10      0.5535     67.19%    0.4917   69.67%    0.003429  1010.8s/ep  ETA 8h25m48s
+     11      0.5293     65.07%    0.4993   75.67%    0.003316  1010.2s/ep  ETA 8h08m53s
+     12      0.5440     74.11%    0.4846   67.33%    0.003196  1009.9s/ep  ETA 7h51m58s
+     13      0.5323     70.20%    0.4917   67.33%    0.003069  1008.5s/ep  ETA 7h35m00s
+     14      0.5016     72.10%    0.5049   81.33%    0.002935  1010.3s/ep  ETA 7h18m08s ◄ best
+     15      0.5131     73.21%    0.4860   77.00%    0.002796  1009.3s/ep  ETA 7h01m14s
+     16      0.4991     71.09%    0.4841   77.67%    0.002653  1009.6s/ep  ETA 6h44m21s
+     17      0.5000     73.21%    0.4928   70.67%    0.002505  1010.8s/ep  ETA 6h27m30s
+     18      0.4766     73.10%    0.4845   77.00%    0.002355  1009.7s/ep  ETA 6h10m37s
+     19      0.4939     74.44%    0.4704   73.00%    0.002203  1009.0s/ep  ETA 5h53m45s
+     20      0.4994     70.65%    0.4672   79.00%    0.002050  1009.4s/ep  ETA 5h36m53s
+     21      0.5042     72.21%    0.4646   75.00%    0.001897  1009.8s/ep  ETA 5h20m01s
+     22      0.4892     72.43%    0.4783   77.33%    0.001745  1009.6s/ep  ETA 5h03m10s
+     23      0.4948     75.56%    0.4734   73.67%    0.001595  1009.6s/ep  ETA 4h46m18s
+     24      0.4742     73.10%    0.4661   77.00%    0.001447  1011.6s/ep  ETA 4h29m29s
+     25      0.4929     74.89%    0.4615   74.33%    0.001304  1012.8s/ep  ETA 4h12m39s
+     26      0.4675     74.44%    0.4751   76.67%    0.001165  1013.2s/ep  ETA 3h55m50s
+     27      0.5131     72.99%    0.4700   73.00%    0.001031  1009.5s/ep  ETA 3h38m59s
+     28      0.4768     73.77%    0.4643   78.33%    0.000904  1011.9s/ep  ETA 3h22m08s
+     29      0.4738     74.22%    0.4622   77.67%    0.000784  1010.7s/ep  ETA 3h05m18s
+     30      0.4716     75.00%    0.4581   78.00%    0.000671  1009.8s/ep  ETA 2h48m27s
+     31      0.4804     74.22%    0.4583   77.33%    0.000567  1009.9s/ep  ETA 2h31m36s
+     32      0.4723     74.55%    0.4658   78.67%    0.000472  1009.9s/ep  ETA 2h14m45s
+     33      0.4686     75.89%    0.4567   78.00%    0.000387  1010.0s/ep  ETA 1h57m54s
+     34      0.4594     76.12%    0.4558   77.33%    0.000313  1010.1s/ep  ETA 1h41m03s
+     35      0.4684     74.55%    0.4594   78.67%    0.000248  1009.5s/ep  ETA 1h24m12s
+     36      0.4588     76.00%    0.4611   78.33%    0.000195  1009.5s/ep  ETA 1h07m22s
+     37      0.4727     75.89%    0.4593   79.00%    0.000154  1007.8s/ep  ETA 50m31s
+     38      0.4572     77.01%    0.4561   78.67%    0.000124  1007.7s/ep  ETA 33m40s
+     39      0.4615     76.12%    0.4565   78.33%    0.000106  1007.6s/ep  ETA 16m50s
+     40      0.4548     75.56%    0.4592   79.00%    0.000100  1006.4s/ep  ETA 00m00s
+───────────────────────────────────────────────────────────────────────────────────────────────
+  Training complete in 40410.0s  (avg 1010.3s/epoch)
+  Best Val Accuracy : 81.33%  (Epoch 14)
+
+[4/7] Training classical baselines...
+
+  Model                   Accuracy  Precision   Recall       F1
+  ────────────────────────────────────────────────────────────
+  Hybrid QNN (VQC)          79.00%     79.90%    79.00%    78.82%
+  Random Forest             92.00%     92.00%    92.00%    91.95%
+  SVM (RBF)                 81.67%     84.54%    81.67%    81.08%
+  Gradient Boost            93.00%     93.03%    93.00%    92.97%
+
+[5/7] Classification Report — Hybrid QNN (VQC):
+              precision    recall  f1-score   support
+
+        eMBB     0.9192    0.9100    0.9146       100
+       URLLC     0.6829    0.8400    0.7534       100
+        mMTC     0.7949    0.6200    0.6966       100
+
+    accuracy                         0.7900       300
+   macro avg     0.7990    0.7900    0.7882       300
+weighted avg     0.7990    0.7900    0.7882       300
+
+[6/7] Generating report-quality figures...
+      Saved → qml_6g_outputs\01_training_curves.png
+      Saved → qml_6g_outputs\02_confusion_matrix.png
+      Saved → qml_6g_outputs\03_precision_recall_f1.png
+      Saved → qml_6g_outputs\04_roc_curves.png
+      Saved → qml_6g_outputs\05_model_comparison.png
+      Saved → qml_6g_outputs\06_feature_analysis.png
+      Saved → qml_6g_outputs\07_quantum_circuit.png
+      Saved → qml_6g_outputs\08_per_class_metrics.png
+      Saved → qml_6g_outputs\09_training_dynamics.png
+      Saved → qml_6g_outputs\10_full_dashboard.png
+
+[7/7] All figures saved to: ./qml_6g_outputs/
+
+════════════════════════════════════════════════════════════════════
+  FINAL RESULTS SUMMARY
+════════════════════════════════════════════════════════════════════
+  Dataset       : 1200 samples  (Real Wireshark CSV data)
+  Applications  : GeForce_Now, KT_GameBox, Battleground, Teamfight_Tactics,
+                  AfreecaTV, Naver_NOW, YouTube_Live, Netflix, Amazon_Prime,
+                  YouTube, Zoom, MS_Teams, Google_Meet, Roblox, Zepeto
+  Features      : 8  (throughput, pkt_size, IAT_mean, IAT_std,
+                    pkt_count, DL/UL_ratio, bitrate_mean, bitrate_std)
+  Architecture  : Hybrid QNN  (Classical Pre → VQC → Classical Post)
+  Quantum Part  : 4-qubit VQC | 5 StronglyEntangling layers
+                  State space: 2^4 = 16 dimensions
+  Optimizer     : Adam + Cosine Annealing LR  (0.004 → 1e-4)
+  Class weights : eMBB=1.0  URLLC=2.5  mMTC=1.0  (URLLC upweighted for recall)
+  Epochs        : 40  (best at epoch 14)
+
+  Model                   Accuracy  Precision   Recall       F1
+  ────────────────────────────────────────────────────────────
+  Hybrid QNN (VQC)          79.00%     79.90%    79.00%    78.82%  ◄ QML
+  Random Forest             92.00%     92.00%    92.00%    91.95%
+  SVM (RBF)                 81.67%     84.54%    81.67%    81.08%
+  Gradient Boost            93.00%     93.03%    93.00%    92.97%
+
+  OUTPUT FILES:
+    01_training_curves.png       — Loss & Accuracy all epochs
+    02_confusion_matrix.png      — Raw + Normalised confusion matrices
+    03_precision_recall_f1.png   — Per-class P/R/F1 all models
+    04_roc_curves.png            — ROC + AUC all classes & models
+    05_model_comparison.png      — Grouped bar + Radar chart
+    06_feature_analysis.png      — Scatter + Correlation + Importance
+    07_quantum_circuit.png       — Full VQC gate diagram
+    08_per_class_metrics.png     — P/R heatmaps all models
+    09_training_dynamics.png     — LR schedule + P/R/F1 curves
+    10_full_dashboard.png        — Combined report dashboard
+════════════════════════════════════════════════════════════════════
+  ✅  COMPLETE — ready to use in your research report!
+════════════════════════════════════════════════════════════════════
+
+D:\Projects\QML_6G>

@@ -75,7 +75,7 @@ np.random.seed(42)
 torch.manual_seed(42)
 
 # ── Output directory ────────────────────────────────────────────────────────
-OUT_DIR = "qml_6g_outputs"
+OUT_DIR = "../Outputs/qml_6g_outputs_3"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 # ── Colour palette (dark theme) ─────────────────────────────────────────────
@@ -110,9 +110,9 @@ N_QUBITS   = 4
 N_LAYERS   = 3       # increased for better expressibility
 N_CLASSES  = 3
 N_FEATURES = 8
-EPOCHS     = 10      # set low for testing; increase to 30-40 for final results
+EPOCHS     = 30      # set low for testing; increase to 30-40 for final results
 BATCH_SIZE = 32
-LR         = 0.008
+LR         = 0.005
 N_SAMPLES  = 900     # more data → better convergence
 
 HEADER = "═" * 68
@@ -253,7 +253,7 @@ SIMULATION FIDELITY
 # ═══════════════════════════════════════════════════════════════════════════════
 #  DATASET PATH  ← change this to wherever you extracted the Kaggle zip
 # ═══════════════════════════════════════════════════════════════════════════════
-DATASET_PATH = r"D:\Projects\QML_6G\5G_Traffic_Datasets"
+DATASET_PATH = r"/5G_Traffic_Datasets"
 
 # ── Slice label mapping ───────────────────────────────────────────────────────
 # Based on ITU IMT-2020 / 3GPP TS 22.261 service categories.
