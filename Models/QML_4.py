@@ -75,7 +75,7 @@ np.random.seed(42)
 torch.manual_seed(42)
 
 # ── Output directory ────────────────────────────────────────────────────────
-OUT_DIR = "qml_6g_outputs_5"
+OUT_DIR = "../Outputs/qml_6g_outputs_5"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 # ── Colour palette (dark theme) ─────────────────────────────────────────────
