@@ -1,11 +1,5 @@
 # QML-Based Traffic Management in 6G Networks
 
-<p align="center">
-  <img src="qml_6g_outputs/10_full_dashboard.png" alt="Project Dashboard" width="100%"/>
-</p>
-
----
-
 ## Project Details
 
 | Field | Details |
