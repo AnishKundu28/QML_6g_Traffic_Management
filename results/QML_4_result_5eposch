@@ -1,7 +1,3 @@
-Microsoft Windows [Version 10.0.26200.8037]
-(c) Microsoft Corporation. All rights reserved.
-
-D:\Projects\QML_6G>python QML_4.py
 ════════════════════════════════════════════════════════════════════
   QML-BASED TRAFFIC MANAGEMENT IN 6G NETWORKS
   Hybrid Variational Quantum Circuit (VQC) Classifier
@@ -143,7 +139,3 @@ weighted avg     0.7807    0.7244    0.7048       225
     09_training_dynamics.png     — LR schedule + P/R/F1 curves
     10_full_dashboard.png        — Combined report dashboard
 ════════════════════════════════════════════════════════════════════
-  ✅  COMPLETE — ready to use in your research report!
-════════════════════════════════════════════════════════════════════
-
-D:\Projects\QML_6G>
